@@ -6,6 +6,7 @@
 //
 //
 #import "SwipeData.h"
+#include "bitset.h"
 
 @interface AudioDecoder : NSObject {
   int silenceLevel;
@@ -15,8 +16,8 @@
   
 - (int) getMinLevel: (NSMutableData *)data coeff:(double)coeff;
 - (BOOL) isOne: (int)actualInterval oneInterval:(int)oneInterval;
-- (CFMutableBitVectorRef) decodeToBitSet: (NSMutableData *)data;
-- (SwipeData *) decodeToASCII: (CFMutableBitVectorRef)bits;
-- (SwipeData *) decodeToASCII: (CFMutableBitVectorRef)bits beginIndex:(int)beginIndex bitsPerChar:(int)bitsPerChar baseChar:(int)baseChar;
+- (bitset_t) decodeToBitSet: (NSMutableData *)data;
+- (SwipeData *) decodeToASCII: (bitset_t)bits;
+- (SwipeData *) decodeToASCII: (bitset_t)bits beginIndex:(int)beginIndex bitsPerChar:(int)bitsPerChar baseChar:(int)baseChar;
 - (char) decode: (int)input baseChar:(int)baseChar;
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "AudioDecoder.h"
+#include "bitset.h"
 @implementation AudioDecoder
 - (id) init {
   self = [super init];
@@ -70,8 +71,8 @@
   }
 }
 
-- (CFMutableBitVectorRef) decodeToBitSet:(NSMutableData *)data {
-  CFMutableBitVectorRef result = CFBitVectorCreateMutable(NULL, 0);
+- (bitset_t) decodeToBitSet:(NSMutableData *)data {
+  bitset_t result = initBitset();
   NSInputStream *nis = [[NSInputStream alloc] initWithData:data];
   [nis open];
   
@@ -114,7 +115,7 @@
             oneInterval = sinceLast;
             if(needHalfOne){
               expectedParityBit = 1 - expectedParityBit;
-              CFBitVectorSetBitAtIndex(result, resultBitCount, true);
+              setBitAtIndex(result, resultBitCount);
               resultBitCount++;
               // don't need next to be
               needHalfOne = false;
@@ -127,7 +128,7 @@
               break;
               // throw new error did not get second half of 1 value
             } else {
-              CFBitVectorSetBitAtIndex(result, resultBitCount, false);
+              unsetBitAtIndex(result, resultBitCount);
               resultBitCount++;
             }
           }
@@ -143,12 +144,12 @@
   return result;
 }
 
-- (SwipeData *) decodeToASCII:(CFMutableBitVectorRef)bits {
+- (SwipeData *) decodeToASCII:(bitset_t)bits {
   NSLog(@"entering decodeToASCII");
   
+  
   SwipeData *toReturn = [[SwipeData alloc] init];
-  CFRange range = CFRangeMake(0, CFBitVectorGetCount(bits));
-  int first1 = CFBitVectorGetFirstIndexOfBit(bits, range, true);
+  int first1 = firstSetBit(bits);
   
   if(first1 < 0) {
     [toReturn setBadRead];
@@ -160,7 +161,7 @@
   int i = first1;
   //check for 5 bit sentinel
   for(; i < first1 + 4; i++){
-    if(CFBitVectorGetBitAtIndex(bits, i)){
+    if(getBitAtIndex(bits, i)){
       //lsb first. so with each following bit, shift it lef 1 place
       sentinel += 1 << exp;
     }
@@ -173,7 +174,7 @@
     return [self decodeToASCII:bits beginIndex:first1 bitsPerChar:4 baseChar:48];
   } else {
     for(; i < first1 + 6; i++){
-      if(CFBitVectorGetBitAtIndex(bits, i)){
+      if(getBitAtIndex(bits, i)){
         sentinel += 1 << exp;
       }
       exp++;
@@ -187,7 +188,7 @@
   return toReturn;
 }
 
-- (SwipeData *) decodeToASCII:(CFMutableBitVectorRef)bits beginIndex:(int)beginIndex bitsPerChar:(int)bitsPerChar baseChar:(int)baseChar {
+- (SwipeData *) decodeToASCII:(bitset_t)bits beginIndex:(int)beginIndex bitsPerChar:(int)bitsPerChar baseChar:(int)baseChar {
   NSLog(@"decode to ascii with gnarls prots");
   
   NSMutableString *nms = [[NSMutableString alloc] init];
@@ -196,7 +197,8 @@
   char endSentinel = '?';
   int charCount = 0;
   BOOL sentinelFound = false;
-  int size = CFBitVectorGetCount(bits);
+  // ***************************************** NEED TO CHANGE THIS *****************************************/
+  int size = BITSET_SIZE;
   int letterVal = 0;
   char letter;
   BOOL expectedParity;
@@ -208,7 +210,7 @@
     exp = 0;
     int nextCharIndex = i + bitsPerChar;
     for(; i < nextCharIndex; i++){
-      bit = CFBitVectorGetBitAtIndex(bits, i);
+      bit = getBitAtIndex(bits, i);
       if(bit){
         letterVal += 1 << exp;
         expectedParity = !expectedParity;
@@ -220,7 +222,7 @@
     NSLog(@"letter %c", letter);
     
     [nms appendFormat:@"%c", letter];
-    bit = CFBitVectorGetBitAtIndex(bits, i);
+    bit = getBitAtIndex(bits, i);
     if(bit != expectedParity){
   
     }

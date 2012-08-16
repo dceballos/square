@@ -5,7 +5,7 @@
 //  Created by Adam Rachman on 8/15/12.
 //
 //
-#include "SwipeData.h"
+#import "SwipeData.h"
 
 @interface AudioDecoder : NSObject {
   int silenceLevel;

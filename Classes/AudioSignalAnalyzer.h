@@ -8,6 +8,7 @@
 
 #import "AudioQueueObject.h"
 #import "PatternRecognizer.h"
+#import "AudioDecoder.h"
 
 //#define DETAILED_ANALYSIS
 
@@ -45,6 +46,7 @@ analyzerData;
 - (void) addRecognizer: (id<PatternRecognizer>)recognizer;
 
 - (void) setupRecording;
+- (void)decode;
 
 - (void) record;
 - (void) stop;

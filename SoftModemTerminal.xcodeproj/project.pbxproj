@@ -17,6 +17,10 @@
 		288765590DF743DE002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765580DF743DE002DB57D /* CoreGraphics.framework */; };
 		289233AE0DB2D0DB0083E9F9 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289233A90DB2D0DB0083E9F9 /* MainViewController.m */; };
 		289233B00DB2D0DB0083E9F9 /* FlipsideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289233AD0DB2D0DB0083E9F9 /* FlipsideViewController.m */; };
+		65F425AB15DC89170012FFFB /* AudioDecoder.h in Sources */ = {isa = PBXBuildFile; fileRef = 65F425A615DC87A70012FFFB /* AudioDecoder.h */; };
+		65F425AC15DC891D0012FFFB /* AudioDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F425A715DC87A70012FFFB /* AudioDecoder.m */; };
+		65F425AD15DC891F0012FFFB /* SwipeData.h in Sources */ = {isa = PBXBuildFile; fileRef = 65F425A815DC87A70012FFFB /* SwipeData.h */; };
+		65F425AE15DC89210012FFFB /* SwipeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F425A915DC87A70012FFFB /* SwipeData.m */; };
 		7000540711E5FD1200ED71EB /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7000540611E5FD1200ED71EB /* AVFoundation.framework */; };
 		702E1D02118D265F00141E6A /* AudioQueueObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 702E1CF5118D265F00141E6A /* AudioQueueObject.m */; };
 		702E1D03118D265F00141E6A /* AudioSignalAnalyzer.m in Sources */ = {isa = PBXBuildFile; fileRef = 702E1CF7118D265F00141E6A /* AudioSignalAnalyzer.m */; };
@@ -42,6 +46,10 @@
 		289233AD0DB2D0DB0083E9F9 /* FlipsideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FlipsideViewController.m; path = Classes/FlipsideViewController.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* SoftModemTerminal_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoftModemTerminal_Prefix.pch; sourceTree = "<group>"; };
+		65F425A615DC87A70012FFFB /* AudioDecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AudioDecoder.h; path = Classes/AudioDecoder.h; sourceTree = "<group>"; };
+		65F425A715DC87A70012FFFB /* AudioDecoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AudioDecoder.m; path = Classes/AudioDecoder.m; sourceTree = "<group>"; };
+		65F425A815DC87A70012FFFB /* SwipeData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SwipeData.h; path = Classes/SwipeData.h; sourceTree = "<group>"; };
+		65F425A915DC87A70012FFFB /* SwipeData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = SwipeData.m; path = Classes/SwipeData.m; sourceTree = "<group>"; };
 		7000540611E5FD1200ED71EB /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		702E1CF4118D265F00141E6A /* AudioQueueObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioQueueObject.h; path = Classes/AudioQueueObject.h; sourceTree = "<group>"; };
 		702E1CF5118D265F00141E6A /* AudioQueueObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioQueueObject.m; path = Classes/AudioQueueObject.m; sourceTree = "<group>"; };
@@ -167,6 +175,10 @@
 		702E1CF3118D263A00141E6A /* Audio */ = {
 			isa = PBXGroup;
 			children = (
+				65F425A615DC87A70012FFFB /* AudioDecoder.h */,
+				65F425A715DC87A70012FFFB /* AudioDecoder.m */,
+				65F425A815DC87A70012FFFB /* SwipeData.h */,
+				65F425A915DC87A70012FFFB /* SwipeData.m */,
 				702E1D58118D287600141E6A /* CharReceiver.h */,
 				702E1CF4118D265F00141E6A /* AudioQueueObject.h */,
 				702E1CF5118D265F00141E6A /* AudioQueueObject.m */,
@@ -254,10 +266,14 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* SoftModemTerminalAppDelegate.m in Sources */,
 				289233AE0DB2D0DB0083E9F9 /* MainViewController.m in Sources */,
+				65F425AE15DC89210012FFFB /* SwipeData.m in Sources */,
+				65F425AC15DC891D0012FFFB /* AudioDecoder.m in Sources */,
 				289233B00DB2D0DB0083E9F9 /* FlipsideViewController.m in Sources */,
 				702E1D02118D265F00141E6A /* AudioQueueObject.m in Sources */,
+				65F425AB15DC89170012FFFB /* AudioDecoder.h in Sources */,
 				702E1D03118D265F00141E6A /* AudioSignalAnalyzer.m in Sources */,
 				702E1D04118D265F00141E6A /* AudioSignalGenerator.m in Sources */,
+				65F425AD15DC891F0012FFFB /* SwipeData.h in Sources */,
 				702E1D05118D265F00141E6A /* FSKRecognizer.mm in Sources */,
 				702E1D07118D265F00141E6A /* MultiDelegate.m in Sources */,
 				7061347B11F870BA00E36A4D /* FSKSerialGenerator.mm in Sources */,

@@ -190,13 +190,8 @@ static void recordingCallback (
   
   if (done)
   {
-    NSLog(@"finished recording size %d", [analyzer.data length]);
-    SInt16* ints = (SInt16*)[analyzer.data bytes];
-    
-    for (int i=0;i<[analyzer.data length]/sizeof(SInt16);i++)
-    {
-      NSLog(@"%d", ints[i]);
-    }
+    NSLog(@"finished recording size %d", [analyzer.data length]);    
+    [analyzer decode];
     
     startedRecording = false;
     done = false;
@@ -343,6 +338,18 @@ static void recordingCallback (
 	UInt64 nsWidth = SAMPLES_TO_NS(width);
 	for (id<PatternRecognizer> rec in recognizers)
 		[rec edge:height width:nsWidth interval:nsInterval];
+}
+
+- (void)decode
+{
+  AudioDecoder *decoder = [[AudioDecoder alloc] init];
+    
+  NSLog(@"MIN VALUE: %d", [decoder getMinLevel:data coeff:0.5]);
+  CFMutableBitVectorRef bits = [decoder decodeToBitSet:data];
+  
+  SwipeData *sd = [decoder decodeToASCII:bits];
+  NSLog(@"bad read? %@", [sd isBadRead] ? @"YES" : @"NO");
+  NSLog(@"%@", sd.content);
 }
 
 - (void) reset

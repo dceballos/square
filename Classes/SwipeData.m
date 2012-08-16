@@ -9,8 +9,12 @@
 #import "SwipeData.h"
 
 @implementation SwipeData
+
+@synthesize content;
+@synthesize badRead;
+
 -(id) init {
-  [self init];
+  self = [super init];
   if(self) {
     badRead = false;
     raw = [[NSMutableData alloc] init];
@@ -20,7 +24,7 @@
 }
 - (void) setBadRead
 {
-  self->badRead = true;
+  self.badRead = YES;
 }
 
 - (BOOL) isBadRead 
@@ -29,6 +33,7 @@
 }
 
 - (void) setContent: (NSString *) text {
+  NSLog(@"setting content %@", text);
   content = text;
 }
 @end

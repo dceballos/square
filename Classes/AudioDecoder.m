@@ -73,13 +73,15 @@
 - (CFMutableBitVectorRef) decodeToBitSet:(NSMutableData *)data {
   CFMutableBitVectorRef result = CFBitVectorCreateMutable(NULL, 0);
   NSInputStream *nis = [[NSInputStream alloc] initWithData:data];
+  [nis open];
+  
   int i = 0;
   int resultBitCount = 0;
   int lastSign = -1;
   int lasti = 0;
   short dp;
   int first = 0;
-  
+
   //Interval between transitions for a 1 bit. There are two transition per 1 bit, 1 per 1 bit, 1 per 0.
   //So if interval is around 15, then if the space between transitions is 17, 15, that's a 1. But if that was 32, that'd be 0.
   //The pattern starts with a self-clocking set of 0s. We'll discard the first few, just because.
@@ -137,16 +139,20 @@
     i++;
   }
   [nis close];
+  
   return result;
 }
 
 - (SwipeData *) decodeToASCII:(CFMutableBitVectorRef)bits {
+  NSLog(@"entering decodeToASCII");
+  
   SwipeData *toReturn = [[SwipeData alloc] init];
   CFRange range = CFRangeMake(0, CFBitVectorGetCount(bits));
   int first1 = CFBitVectorGetFirstIndexOfBit(bits, range, true);
   
   if(first1 < 0) {
     [toReturn setBadRead];
+    NSLog(@"setting bad read");
     return toReturn;
   }
   int sentinel = 0;
@@ -161,6 +167,8 @@
     exp++;
   }
   //11 is magic sentinel number for track 2. Corresponds to ascii ';' with offset 48 (ascii '0')
+  NSLog(@"sentinel %d", sentinel);
+  
   if (sentinel == 11) {
     return [self decodeToASCII:bits beginIndex:first1 bitsPerChar:4 baseChar:48];
   } else {
@@ -180,6 +188,8 @@
 }
 
 - (SwipeData *) decodeToASCII:(CFMutableBitVectorRef)bits beginIndex:(int)beginIndex bitsPerChar:(int)bitsPerChar baseChar:(int)baseChar {
+  NSLog(@"decode to ascii with gnarls prots");
+  
   NSMutableString *nms = [[NSMutableString alloc] init];
   SwipeData *toReturn = [[SwipeData alloc] init];
   int i = beginIndex;
@@ -206,6 +216,9 @@
       exp++;
     }
     letter = [self decode:letterVal baseChar:baseChar];
+    
+    NSLog(@"letter %c", letter);
+    
     [nms appendFormat:@"%c", letter];
     bit = CFBitVectorGetBitAtIndex(bits, i);
     if(bit != expectedParity){

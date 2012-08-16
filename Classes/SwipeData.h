@@ -13,6 +13,9 @@
   NSString *content;
 }
 
+@property(nonatomic,readonly) NSString* content;
+@property(nonatomic) BOOL badRead;
+
 - (void) setBadRead;
 - (BOOL) isBadRead;
 - (void) setContent: (NSString *)text;

@@ -23,124 +23,12 @@
 #define EDGE_MAX_WIDTH			8
 #define IDLE_CHECK_PERIOD		MS_TO_SAMPLES(10)
 
-static int minLevel = 50;
+static int minLevel = 500;
 static bool silent = true;
 static bool startedRecording = false;
 static bool done = false;
-static int silenceAtEndThreshold = 20;
+static int silenceAtEndThreshold = SAMPLE_RATE;
 static int silenceSamples = 0;
-
-static int analyze( SAMPLE *inputBuffer,
-						  unsigned long framesPerBuffer,
-						  AudioSignalAnalyzer* analyzer)
-{
-	analyzerData *data = analyzer.pulseData;
-	SAMPLE *pSample = inputBuffer;
-	int lastFrame = data->lastFrame;
-	
-	unsigned idleInterval = data->plateauWidth + data->lastEdgeWidth + data->edgeWidth;
-	
-	for (long i=0; i < framesPerBuffer; i++, pSample++)
-	{
-		int thisFrame = *pSample;
-		int diff = thisFrame - lastFrame;
-		
-		int sign = 0;
-		if (diff > EDGE_SLOPE_THRESHOLD)
-		{
-      // NSLog(@"sinal rising");
-			// Signal is rising
-			sign = 1;
-		}
-		else if(-diff > EDGE_SLOPE_THRESHOLD)
-		{
-			// Signal is falling
-      // NSLog(@"sinal falling");
-			sign = -1;
-		}
-		
-		// If the signal has changed direction or the edge detector has gone on for too long,
-		//  then close out the current edge detection phase
-		if(data->edgeSign != sign || (data->edgeSign && data->edgeWidth + 1 > EDGE_MAX_WIDTH))
-		{
-			if(abs(data->edgeDiff) > EDGE_DIFF_THRESHOLD && data->lastEdgeSign != data->edgeSign)
-			{
-				// The edge is significant
-				[analyzer edge:data->edgeDiff
-						 width:data->edgeWidth
-					  interval:data->plateauWidth + data->edgeWidth];
-				
-				// Save the edge
-				data->lastEdgeSign = data->edgeSign;
-				data->lastEdgeWidth = data->edgeWidth;
-				
-				// Reset the plateau
-				data->plateauWidth = 0;
-				idleInterval = data->edgeWidth;
-#ifdef DETAILED_ANALYSIS
-				data->plateauSum = 0;
-				data->plateauMin = data->plateauMax = thisFrame;
-#endif
-			}
-			else
-			{
-				// The edge is rejected; add the edge data to the plateau
-				data->plateauWidth += data->edgeWidth;
-#ifdef DETAILED_ANALYSIS
-				data->plateauSum += data->edgeSum;
-				if(data->plateauMax < data->edgeMax)
-					data->plateauMax = data->edgeMax;
-				if(data->plateauMin > data->edgeMin)
-					data->plateauMin = data->edgeMin;
-#endif
-			}
-			
-			data->edgeSign = sign;
-			data->edgeWidth = 0;
-			data->edgeDiff = 0;
-#ifdef DETAILED_ANALYSIS
-			data->edgeSum = 0;
-			data->edgeMin = data->edgeMax = lastFrame;
-#endif
-		}
-		
-		if(data->edgeSign)
-		{
-			// Sample may be part of an edge
-			data->edgeWidth++;
-			data->edgeDiff += diff;
-#ifdef DETAILED_ANALYSIS
-			data->edgeSum += thisFrame;
-			if(data->edgeMax < thisFrame)
-				data->edgeMax = thisFrame;
-			if(data->edgeMin > thisFrame)
-				data->edgeMin = thisFrame;
-#endif
-		}
-		else
-		{
-			// Sample is part of a plateau
-			data->plateauWidth++;
-#ifdef DETAILED_ANALYSIS
-			data->plateauSum += thisFrame;
-			if(data->plateauMax < thisFrame)
-				data->plateauMax = thisFrame;
-			if(data->plateauMin > thisFrame)
-				data->plateauMin = thisFrame;
-#endif
-		}
-		idleInterval++;
-		
-		data->lastFrame = lastFrame = thisFrame;
-		
-		if ( (idleInterval % IDLE_CHECK_PERIOD) == 0 )
-			[analyzer idle:idleInterval];
-		
-	}
-	
-	return 0;
-}
-
 
 static void recordingCallback (
 							   void								*inUserData,
@@ -157,9 +45,13 @@ static void recordingCallback (
 	AudioSignalAnalyzer *analyzer = (AudioSignalAnalyzer *) inUserData;
   SInt16* frames = (SInt16*)inBuffer->mAudioData;
   
+  //NSLog(@"sizeof %ld", inNumPackets);
+  
   @autoreleasepool {
-  for (int i=0;i<sizeof(frames)-1;i++)
+  for (int i=0;i<inNumPackets;i++)
   {
+    //NSLog(@"SAMPLE %d", frames[i]);
+    
     silent = abs(frames[i]) < minLevel;
     if (!silent)
     {
@@ -193,10 +85,18 @@ static void recordingCallback (
     NSLog(@"finished recording size %d", [analyzer.data length]);    
     [analyzer decode];
     
+    /*SInt16* ints = (SInt16*)[analyzer.data bytes];
+    
+    for (int i=0;i<[analyzer.data length]/sizeof(SInt16);i++)
+    {
+      NSLog(@"%d", ints[i]);
+    }*/
+    
     startedRecording = false;
     done = false;
     silent = true;
     silenceSamples = 0;
+    analyzer.data = nil;
   }
   
 	// if there is audio data, analyze it

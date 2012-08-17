@@ -34,7 +34,7 @@ int firstSetBit(bitset_t bitset){
   int j = 0;
   int bitSlice = -1;
   for(; i < (BITSET_SIZE / BYTE_SIZE / sizeof(int)); i++){
-    if(bitset[i] > 0){
+    if(abs(bitset[i]) > 0){
       bitSlice = bitset[i];
       break;
     }

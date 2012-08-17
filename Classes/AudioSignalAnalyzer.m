@@ -7,6 +7,7 @@
 //
 
 #import "AudioSignalAnalyzer.h"
+#import "bitset.h"
 
 #define SAMPLE_RATE  44100
 #define SAMPLE  SInt16
@@ -124,7 +125,17 @@ static void recordingCallback (
 //	[pool release];
 }
 
-
+static NSInteger intSort(id num1, id num2, void *context)
+{
+  int v1 = [num1 intValue];
+  int v2 = [num2 intValue];
+  if (v1 < v2)
+    return NSOrderedAscending;
+  else if (v1 > v2)
+    return NSOrderedDescending;
+  else
+    return NSOrderedSame;
+}
 
 @implementation AudioSignalAnalyzer
 
@@ -242,14 +253,36 @@ static void recordingCallback (
 
 - (void)decode
 {
-  AudioDecoder *decoder = [[AudioDecoder alloc] init];
-    
+  /*AudioDecoder *decoder = [[AudioDecoder alloc] init];
   NSLog(@"MIN VALUE: %d", [decoder getMinLevel:data coeff:0.5]);
-  CFMutableBitVectorRef bits = [decoder decodeToBitSet:data];
-  
+  bitset_t bits = [decoder decodeToBitSet:data];
   SwipeData *sd = [decoder decodeToASCII:bits];
   NSLog(@"bad read? %@", [sd isBadRead] ? @"YES" : @"NO");
-  NSLog(@"%@", sd.content);
+  NSLog(@"%@", sd.content);*/
+  
+  int zeroCrossSamples = 0;
+  SInt16 previousValue = 0;
+  NSMutableArray *samples = [[NSMutableArray alloc] init];;
+  
+  SInt16* ints = (SInt16*)[data bytes];
+  for (int i=0;i<[data length]/sizeof(SInt16);i++)
+  {
+    if ((ints[i] > 0 && previousValue < 0) || (ints[i] < 0 && previousValue > 0))
+    {
+      //sign change
+      [samples addObject:[NSNumber numberWithInt:zeroCrossSamples]];
+      zeroCrossSamples = 0;
+    }
+    
+    zeroCrossSamples ++;
+    previousValue = ints[i];
+  }
+  NSLog(@"%@", samples);
+}
+
+- (NSArray*)sortedArray:(NSArray*)array
+{
+  return [array sortedArrayUsingFunction:intSort context:NULL];
 }
 
 - (void) reset

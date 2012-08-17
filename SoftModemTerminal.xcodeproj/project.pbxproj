@@ -11,15 +11,14 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		23CD74FF15DD73CE00C8FA66 /* bitset.c in Sources */ = {isa = PBXBuildFile; fileRef = 23CD74F915DD668600C8FA66 /* bitset.c */; };
 		280E754D0DD40C5E005A515E /* FlipsideView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 280E754A0DD40C5E005A515E /* FlipsideView.xib */; };
 		280E754E0DD40C5E005A515E /* MainView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 280E754B0DD40C5E005A515E /* MainView.xib */; };
 		280E754F0DD40C5E005A515E /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 280E754C0DD40C5E005A515E /* MainWindow.xib */; };
 		288765590DF743DE002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765580DF743DE002DB57D /* CoreGraphics.framework */; };
 		289233AE0DB2D0DB0083E9F9 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289233A90DB2D0DB0083E9F9 /* MainViewController.m */; };
 		289233B00DB2D0DB0083E9F9 /* FlipsideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289233AD0DB2D0DB0083E9F9 /* FlipsideViewController.m */; };
-		65F425AB15DC89170012FFFB /* AudioDecoder.h in Sources */ = {isa = PBXBuildFile; fileRef = 65F425A615DC87A70012FFFB /* AudioDecoder.h */; };
 		65F425AC15DC891D0012FFFB /* AudioDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F425A715DC87A70012FFFB /* AudioDecoder.m */; };
-		65F425AD15DC891F0012FFFB /* SwipeData.h in Sources */ = {isa = PBXBuildFile; fileRef = 65F425A815DC87A70012FFFB /* SwipeData.h */; };
 		65F425AE15DC89210012FFFB /* SwipeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F425A915DC87A70012FFFB /* SwipeData.m */; };
 		7000540711E5FD1200ED71EB /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7000540611E5FD1200ED71EB /* AVFoundation.framework */; };
 		702E1D02118D265F00141E6A /* AudioQueueObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 702E1CF5118D265F00141E6A /* AudioQueueObject.m */; };
@@ -36,6 +35,8 @@
 		1D3623240D0F684500981E51 /* SoftModemTerminalAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoftModemTerminalAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* SoftModemTerminalAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoftModemTerminalAppDelegate.m; sourceTree = "<group>"; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		23CD74F715DD662D00C8FA66 /* bitset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = bitset.h; path = Classes/bitset.h; sourceTree = "<group>"; };
+		23CD74F915DD668600C8FA66 /* bitset.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bitset.c; path = Classes/bitset.c; sourceTree = "<group>"; };
 		280E754A0DD40C5E005A515E /* FlipsideView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FlipsideView.xib; sourceTree = "<group>"; };
 		280E754B0DD40C5E005A515E /* MainView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainView.xib; sourceTree = "<group>"; };
 		280E754C0DD40C5E005A515E /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
@@ -139,6 +140,7 @@
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
@@ -196,6 +198,8 @@
 				702E1CFF118D265F00141E6A /* MultiDelegate.h */,
 				702E1D00118D265F00141E6A /* MultiDelegate.m */,
 				702E1D01118D265F00141E6A /* PatternRecognizer.h */,
+				23CD74F715DD662D00C8FA66 /* bitset.h */,
+				23CD74F915DD668600C8FA66 /* bitset.c */,
 			);
 			name = Audio;
 			sourceTree = "<group>";
@@ -263,17 +267,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23CD74FF15DD73CE00C8FA66 /* bitset.c in Sources */,
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* SoftModemTerminalAppDelegate.m in Sources */,
 				289233AE0DB2D0DB0083E9F9 /* MainViewController.m in Sources */,
 				65F425AE15DC89210012FFFB /* SwipeData.m in Sources */,
-				65F425AC15DC891D0012FFFB /* AudioDecoder.m in Sources */,
 				289233B00DB2D0DB0083E9F9 /* FlipsideViewController.m in Sources */,
 				702E1D02118D265F00141E6A /* AudioQueueObject.m in Sources */,
-				65F425AB15DC89170012FFFB /* AudioDecoder.h in Sources */,
 				702E1D03118D265F00141E6A /* AudioSignalAnalyzer.m in Sources */,
 				702E1D04118D265F00141E6A /* AudioSignalGenerator.m in Sources */,
-				65F425AD15DC891F0012FFFB /* SwipeData.h in Sources */,
+				65F425AC15DC891D0012FFFB /* AudioDecoder.m in Sources */,
 				702E1D05118D265F00141E6A /* FSKRecognizer.mm in Sources */,
 				702E1D07118D265F00141E6A /* MultiDelegate.m in Sources */,
 				7061347B11F870BA00E36A4D /* FSKSerialGenerator.mm in Sources */,
@@ -287,11 +290,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = SoftModemTerminal_Prefix.pch;
+				GCC_WARN_PEDANTIC = YES;
 				INFOPLIST_FILE = "SoftModemTerminal-Info.plist";
 				PRODUCT_NAME = SoftModemTerminal;
 			};
@@ -301,9 +306,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = SoftModemTerminal_Prefix.pch;
+				GCC_WARN_PEDANTIC = YES;
 				INFOPLIST_FILE = "SoftModemTerminal-Info.plist";
 				PRODUCT_NAME = SoftModemTerminal;
 				VALIDATE_PRODUCT = YES;

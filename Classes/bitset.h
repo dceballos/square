@@ -11,7 +11,7 @@
 #include<stdlib.h>
 #include<string.h>
 
-#define BITSET_SIZE 2048
+#define BITSET_SIZE 16384
 #define BYTE_SIZE 8
 
 typedef int* bitset_t;
@@ -39,3 +39,4 @@ int firstSetBit(bitset_t);
 bitset_t initBitset();
 
 #endif
+

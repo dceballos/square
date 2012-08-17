@@ -7,33 +7,33 @@
 //
 #include "bitset.h"
 
-void setBitAtIndex(bitset_t bitset, int pos){
-  int bucketPos = pos / (BYTE_SIZE - 1);
-  int relPos = pos % BYTE_SIZE;
-  (*(bitset + bucketPos)) = (*(bitset + bucketPos)) | (1 << relPos);
+void setBitAtIndex(bitset_t bitset, int idx){
+  int bucketPos = idx / (sizeof(int) * BYTE_SIZE);
+  int offset = idx % (sizeof(int) * BYTE_SIZE);
+  (*(bitset + bucketPos)) = (*(bitset + bucketPos)) | (1 << offset);
 }
 
-void unsetBitAtIndex(bitset_t bitset, int pos){
-  int bucketPos = pos / (BYTE_SIZE - 1);
-  int relPos = pos % BYTE_SIZE;
-  (*(bitset + bucketPos)) = (*(bitset + bucketPos)) | (~(1 << relPos));
+void unsetBitAtIndex(bitset_t bitset, int idx){
+  int bucketPos = idx / (sizeof(int) * BYTE_SIZE);
+  int offset = idx % (sizeof(int) * BYTE_SIZE);
+  (*(bitset + bucketPos)) = (*(bitset + bucketPos)) & (~(1 << offset));
 }
 
-int getBitAtIndex(bitset_t bitset, int pos){
-  int bucketPos = pos / (BYTE_SIZE - 1);
-  int relPos = pos % BYTE_SIZE;
+int getBitAtIndex(bitset_t bitset, int idx){
+  int bucketPos = idx / (sizeof(int) * BYTE_SIZE);
+  int offset = idx % (sizeof(int) * BYTE_SIZE);
   
   if(bucketPos > (BITSET_SIZE / BYTE_SIZE))
     return -1;
   
-  return (*(bitset + bucketPos)) >> relPos;
+  return ((*(bitset + bucketPos)) >> offset) & 1;
 }
 
 int firstSetBit(bitset_t bitset){
   int i = 0;
   int j = 0;
   int bitSlice = -1;
-  for(; i < (BITSET_SIZE / BYTE_SIZE); i++){
+  for(; i < (BITSET_SIZE / BYTE_SIZE / sizeof(int)); i++){
     if(bitset[i] > 0){
       bitSlice = bitset[i];
       break;
@@ -42,15 +42,18 @@ int firstSetBit(bitset_t bitset){
   if(bitSlice == -1){
     return -1;
   }
-  for(; j < BYTE_SIZE; j++){
+  for(; j < (BYTE_SIZE * sizeof(int)); j++){
     if((bitSlice >> j) & 0x1){
       break;
     }
   }
-  return BYTE_SIZE * i + j;
+  return BYTE_SIZE * sizeof(int) * i + j;
 }
 
 bitset_t initBitset(){
-  return malloc((BITSET_SIZE / BYTE_SIZE));
+  bitset_t bits = malloc((BITSET_SIZE / BYTE_SIZE));
+  memset(bits, '\0', (BITSET_SIZE / BYTE_SIZE));
+  return bits;
 }
+
 

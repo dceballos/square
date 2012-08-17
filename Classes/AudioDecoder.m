@@ -95,9 +95,10 @@
   int expectedParityBit = 1;
   
   while([nis hasBytesAvailable]){
-    uint8_t buff[2];
+    char buff[2];
     //Might want to do something if the result is negative
     NSInteger bytesRead = [nis read:buff maxLength:2];
+    memcpy(&dp, buff, 2);
     if((dp * lastSign < 0) && (abs(dp) > minLevel)){
       if(first == 0) {
         first = i;
@@ -125,6 +126,7 @@
           } else {
             oneInterval = sinceLast / 2;
             if (needHalfOne) {
+              NSLog(@"Couldn't find half one of 1 value. This shouldn't be happening");
               break;
               // throw new error did not get second half of 1 value
             } else {
@@ -162,7 +164,7 @@
   //check for 5 bit sentinel
   for(; i < first1 + 4; i++){
     if(getBitAtIndex(bits, i)){
-      //lsb first. so with each following bit, shift it lef 1 place
+      //lsb first. so with each following bit, shift it left 1 place
       sentinel += 1 << exp;
     }
     exp++;

@@ -7,6 +7,7 @@
 //
 
 #import "AudioSignalAnalyzer.h"
+#include "bitset.h"
 
 #define SAMPLE_RATE  44100
 #define SAMPLE  SInt16
@@ -245,7 +246,7 @@ static void recordingCallback (
   AudioDecoder *decoder = [[AudioDecoder alloc] init];
     
   NSLog(@"MIN VALUE: %d", [decoder getMinLevel:data coeff:0.5]);
-  CFMutableBitVectorRef bits = [decoder decodeToBitSet:data];
+  bitset_t bits = [decoder decodeToBitSet:data];
   
   SwipeData *sd = [decoder decodeToASCII:bits];
   NSLog(@"bad read? %@", [sd isBadRead] ? @"YES" : @"NO");

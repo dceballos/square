@@ -8,20 +8,52 @@
 #include "bitset.h"
 
 void setBitAtIndex(bitset_t bitset, int idx){
-  int bucketPos = idx / (sizeof(int) * BYTE_SIZE);
-  int offset = idx % (sizeof(int) * BYTE_SIZE);
-  (*(bitset + bucketPos)) = (*(bitset + bucketPos)) | (1 << offset);
+  
+  /*
+   * Represent bitset with array of ints. 
+   * An element consists of 4 bytes. Since we treat the bitset
+   * as a continuous entity, we need to figure out which bucket
+   * a particular index falls into.
+   *       2          1           0
+   * |95 ... 64 | 63 ... 32 | 31 ... 0 |
+   *
+   * offset is the offset of the index within a bucket
+   *
+   * eg. idx = 8
+   * 
+   * ...|15 ... 8|7 ... 0|
+   *
+   * ...|0  ... 0|1 ... 0|
+   * ...|0  ... 1|0 ... 0| => (1 << offset)
+   * ---------------------- (|)
+   * ...|0  ... 1|1 ... 0|
+   */
+  int bucketPos = idx / (int)(sizeof(int) * BYTE_SIZE);
+  int offset = idx % (int)(sizeof(int) * BYTE_SIZE);
+  (*(bitset + bucketPos)) |= (1 << offset);
 }
 
 void unsetBitAtIndex(bitset_t bitset, int idx){
-  int bucketPos = idx / (sizeof(int) * BYTE_SIZE);
-  int offset = idx % (sizeof(int) * BYTE_SIZE);
-  (*(bitset + bucketPos)) = (*(bitset + bucketPos)) & (~(1 << offset));
+  /*
+   *
+   * eg. idx = 8
+   *
+   * ...|15 ... 8|7 ... 0|
+   *
+   * ...|0  ... 1|1 ... 0|
+   * ...|1  ... 0|1 ... 1| => ~(1 << offset)
+   * ---------------------- (&)
+   * ...|0  ... 0|1 ... 0|
+   */
+
+  int bucketPos = idx / ((int)sizeof(int) * BYTE_SIZE);
+  int offset = idx % ((int)sizeof(int) * BYTE_SIZE);
+  (*(bitset + bucketPos)) &= (~(1 << offset));
 }
 
 int getBitAtIndex(bitset_t bitset, int idx){
-  int bucketPos = idx / (sizeof(int) * BYTE_SIZE);
-  int offset = idx % (sizeof(int) * BYTE_SIZE);
+  int bucketPos = idx / ((int)sizeof(int) * BYTE_SIZE);
+  int offset = idx % ((int)sizeof(int) * BYTE_SIZE);
   
   if(bucketPos > (BITSET_SIZE / BYTE_SIZE))
     return -1;
@@ -47,7 +79,7 @@ int firstSetBit(bitset_t bitset){
       break;
     }
   }
-  return BYTE_SIZE * sizeof(int) * i + j;
+  return BYTE_SIZE * (int)sizeof(int) * i + j;
 }
 
 bitset_t initBitset(){

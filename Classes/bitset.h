@@ -34,6 +34,14 @@ void setBitAtIndex(bitset_t, int);
  * occured
  */
 int getBitAtIndex(bitset_t, int);
+
+/*
+ * setBitAtIndex unsets the bit of a given bitset at position pos
+ *
+ * @params bitset bitset
+ * @params pos bitset index to be set
+ * @return void
+ */
 void unsetBitAtIndex(bitset_t, int);
 int firstSetBit(bitset_t);
 bitset_t initBitset();
